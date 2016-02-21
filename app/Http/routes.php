@@ -1,31 +1,23 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Routes File
-|--------------------------------------------------------------------------
-|
-| Here is where you will register all of the routes in an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| This route group applies the "web" middleware group to every route
-| it contains. The "web" middleware group is defined in your HTTP
-| kernel and includes session state, CSRF protection, and more.
-|
-*/
-
 Route::group(['middleware' => ['web']], function () {
-    //
+    
+Route::controllers([
+    'auth' => 'Auth\AuthController',
+    'password' => 'Auth\PasswordController'
+]);
+
+Route::get('/', 'TodosController@index');
+Route::get('/home', 'TodosController@index');
+Route::get('user/profile/{id}', 'UsersController@profile');
+Route::get('user/profile', 'UsersController@profile');
+Route::get('todos/add', 'TodosController@create');
+Route::get('offer/{todo_id}', 'TodosController@offer');
+Route::get('search', 'TodosController@search');
+Route::post('todos/store', 'TodosController@store');
+Route::get('todos', 'TodosController@mytodos');
+Route::get('jobs', 'TodosController@myjobs');
+Route::get('inbox/{user_id}', 'MessagesController@inbox');
+Route::get('inbox', 'MessagesController@inbox');
+Route::get('send_message', 'MessagesController@send');
 });
