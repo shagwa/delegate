@@ -9,8 +9,13 @@ use App\Http\Controllers\Controller;
 use App\Todo;
 use App\Tag;
 use App\Offer;
+use App\Review;
+use App\Message;
+use App\User;
 use App\Http\Requests\TodoRequest;
+use App\Http\Requests\ReviewRequest;
 use Illuminate\Support\Facades\Auth;
+use Session;
 
 class TodosController extends Controller
 {
@@ -86,5 +91,47 @@ class TodosController extends Controller
         $offer->save();
             
         return redirect('/');
+    }
+    
+    public function review(ReviewRequest $request) {
+        $review = new Review;
+        $review->review = $request->input('review');
+        $review->rate = $request->input('rate');
+        $review->reviewed_id = $request->input('user_id');
+        $review->reviewer_id = Auth::user()->id;
+
+        $review->save();
+        
+        $todo = Todo::find($request->input('todo_id'));
+        $todo->progress = "finished";
+
+        $todo->save();
+            
+        return redirect('/todos');
+    }
+    
+    public function accept_offer($todo_id, $provider_id) {
+        $todo = Todo::find($todo_id);
+        $todo->provider_id = $provider_id;
+        $todo->progress = "started";
+        
+        $todo->save();
+        
+        $provider = User::find($provider_id);
+        
+        $message = new Message;
+        $message->message = "This is an automated message from the System, Contacts of '".$provider->first_name." ".$provider->last_name."' are : <br />".$provider->contacts;
+        $message->from_user_id = $provider->id;
+        $message->to_user_id = Auth::user()->id;
+        $message->save();
+        
+        $message = new Message;
+        $message->message = "This is an automated message from the System, Congratulations, you won the job '".$todo->todo."'. Contacts of '".Auth::user()->first_name." ".Auth::user()->last_name."' are : <br />".Auth::user()->contacts;
+        $message->to_user_id = $provider->id;
+        $message->from_user_id = Auth::user()->id;
+        $message->save();
+            
+        Session::flash('success', 'Contacts have been shared, Please check your inbox.');
+        return redirect('/todos');
     }
 }

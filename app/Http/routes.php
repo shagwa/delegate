@@ -17,6 +17,8 @@ Route::get('search', 'TodosController@search');
 Route::post('todos/store', 'TodosController@store');
 Route::get('todos', 'TodosController@mytodos');
 Route::get('jobs', 'TodosController@myjobs');
+Route::get('review', 'TodosController@review');
+Route::get('accept_offer/{todo_id}/{provider_id}', 'TodosController@accept_offer');
 Route::get('inbox/{user_id}', 'MessagesController@inbox');
 Route::get('inbox', 'MessagesController@inbox');
 Route::get('send_message', 'MessagesController@send');

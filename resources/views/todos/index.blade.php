@@ -45,6 +45,7 @@
 			</div>
 			<div class="timeline-body">
 				<p>Location : <?php echo $feed->location; ?></p>
+				<p>Time : <?php echo $feed->todo_time; ?></p>
 			</div>
 			<?php if($feed->progress == "new") { ?>
 			<?php

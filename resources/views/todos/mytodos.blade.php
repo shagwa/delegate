@@ -43,9 +43,19 @@
 								data-role="tagsinput" readonly="readonly" />
 							<?php } ?>
 						</div>
-						<form class="form-horizontal">
 							<div class="panel-image">
 								<table>
+								    <?php if($feed->progress == "started" || $feed->progress == "finished") { ?>
+								    <tr>
+										<td style="padding: 10px;">
+										<?php $avatar = ($feed->provider->avatar != "" && @file_exists(URL::to('/')."/files/user/40x40/".$feed->provider->avatar)) ? URL::to('/')."/files/user/40x40/".$feed->provider->avatar : URL::to('/')."/files/user/40x40/avatar.png"; ?>
+										<img
+											src="<?php echo $avatar ?>" class="img-circle"
+											width="40" height="40"></td>
+										<td style="padding: 10px;"><a><?php echo $feed->provider->first_name. " ".$feed->provider->last_name; ?></a></td>
+									</tr>
+									<?php } ?>
+									
 									<tr>
 										<td style="padding: 15px"><label>To do</label></td>
 										<td colspan="3"><label name="todo" id="todo"><?php echo $feed->todo; ?></label></td>
@@ -69,7 +79,7 @@
 										<td><label name="tags" id="tags"><?php echo $all_tags; ?></label></td>
 									</tr>
 									<tr>
-									    <td style="padding: 15px"><label>Date:</label></td>
+									    <td style="padding: 15px"><label>Time:</label></td>
 										<td><label name="startdate" id="startdate"><?php echo $feed->todo_time; ?></label></td>
 										<td style="padding: 15px"><label><?php if($feed->is_price == 1) echo "Price : "; else echo "Benefit : "; ?></label>
 										</td>
@@ -80,14 +90,21 @@
 								</table>
 							</div>
 
+                            <?php if($feed->progress == "new") { ?>
 							<div class="panel-footer clearfix">
-								<button type="button" class="btn btn-success" data-toggle="modal" data-target="#reviewpopup">Finish</button>
 								<button type="button" class="btn btn-warning"
 									data-toggle="modal" data-target="#ProviderList<?php echo $feed->id; ?>">Show
 									Providers</button>
 								<span class="toggler fa fa-chevron-down pull-right"></span>
 							</div>
-
+                            <?php } else if($feed->progress == "started") { ?>
+                            <div class="panel-footer clearfix">
+								<button type="button" class="btn btn-success" data-toggle="modal" data-target="#reviewpopup">Finish</button>
+								<span class="toggler fa fa-chevron-down pull-right"></span>
+							</div>
+                            <?php } ?>
+                            
+                            <?php if($feed->progress == "new") { ?>
 							<div id="ProviderList<?php echo $feed->id; ?>" class="modal fade" role="dialog">
 								<div class="modal-dialog">
 									<nav>
@@ -129,8 +146,7 @@
 																	href="/user/profile/<?php echo $offer->id; ?>"><?php echo $offer->first_name . " " . $offer->last_name; ?></a></td>
 																<td style="padding: 10px">
 																	<h4>
-																		<button id="submit" name="submit"
-																			class="btn btn-success">Accept</button>
+																		<a href="/accept_offer/<?php echo $feed->id."/".$offer->id; ?>" class="btn btn-success">Accept</a>
 																	</h4>
 																</td>
 															</tr>
@@ -148,6 +164,8 @@
 									</nav>
 								</div>
 							</div>
+							<?php } ?>
+							<?php if($feed->progress == "started") { ?>
                             <div id="reviewpopup" class="modal fade" role="dialog">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -156,35 +174,42 @@
                                                 <h4 class="modal-title">Rate</h4>
                                         </div>
                                         <div class="modal-body">
+                                            <form class="form-horizontal"
+							                    role="search" action="/review" method="get">
                                             <table style="width:100%;">
                                                 <tr style="padding: 10px;">
                                                     <td style="padding=10px;">
-                                                        <img src="./img/Blank_profile_male.png" class="img-circle"  width="50" height="50">
+                                                        <?php $avatar = ($feed->provider->avatar != "" && @file_exists(URL::to('/')."/files/user/40x40/".$feed->provider->avatar)) ? URL::to('/')."/files/user/40x40/".$feed->provider->avatar : URL::to('/')."/files/user/40x40/avatar.png"; ?>
+                										<img
+                											src="<?php echo $avatar ?>" class="img-circle"
+                											width="40" height="40">
                                                     </td> 
                                                     <td>
-                                                        <a href="#">Name</a>    
+                                                        <a href="/user/profile/<?php echo $feed->provider->id ?>"><?php echo $feed->provider->first_name . " " . $feed->provider->last_name; ?></a>    
                                                     </td>   
                                                     <td>
-                                                        <input id="input-1" class="rating rating-loading" data-min="0" data-max="5" data-step="1" data-size="xs">
+                                                        <input id="input-1" name="rate" class="rating rating-loading" data-min="0" data-max="5" data-step="1" data-size="xs">
                                                     </td> 
                                                 </tr>
                                                 <tr style="padding: 10px;">
                                                     <td colspan="3">
-                                                        <textarea class="form-control custom-control" rows="3" style="resize:none"></textarea>     
+                                                        <input type="hidden" name="todo_id" value="<?php echo $feed->id; ?>" />
+                                                        <input type="hidden" name="user_id" value="<?php echo $feed->provider->id; ?>" />
+                                                        <textarea class="form-control custom-control" name="review" rows="3" style="resize:none"></textarea>     
                                                     </td> 
                                                 </tr>
                                                 <tr style="padding: 10px;">
                                                     <td>
-                                                        <button type="button" class="btn btn-success" >Rate</button>
+                                                        <button type="submit" class="btn btn-success">Rate</button>
                                                     </td> 
                                                 </tr>
-                                            </table>    
+                                            </table>  
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-						</form>
+                            <?php } ?>
 					</div>
 				</div>
 			</div>

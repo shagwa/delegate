@@ -76,7 +76,7 @@
                         			    <td><label name="tags" id="tags"><?php echo $all_tags; ?></label></td>
 									</tr>
 									<tr>
-									    <td style="padding: 15px"><label>Date:</label></td>
+									    <td style="padding: 15px"><label>Time:</label></td>
 										<td><label name="startdate" id="startdate"><?php echo $feed->todo_time; ?></label></td>
 										<td style="padding: 15px"><label><?php if($feed->is_price == 1) echo "Price : "; else echo "Benefit : "; ?></label>
 										</td>

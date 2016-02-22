@@ -11,10 +11,7 @@
 				<?php $avatar = ($user->avatar != "" && @file_exists(URL::to('/')."/files/user/260x260/".$user->avatar)) ? URL::to('/')."/files/user/260x260/".$user->avatar : URL::to('/')."/files/user/260x260/avatar.png"; ?>
 				<img class="full-width" src="<?php echo $avatar ?>">
 			</li>
-
 		</ul>
-
-
 	</div>
 	<div class="col-sm-8">
 		<ul class="list-group">

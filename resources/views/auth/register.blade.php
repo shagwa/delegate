@@ -80,8 +80,8 @@
 				<label class="col-md-4 control-label" for="gender">Gender :</label>
 				<div class="col-md-4">
 					<select class="form-control" id="gender" name="gender">
-						<option>Male</option>
-						<option>Female</option>
+						<option value="m">Male</option>
+						<option value="f">Female</option>
 					</select>
 				</div>
 			</div>
